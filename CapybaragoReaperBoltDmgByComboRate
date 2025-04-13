@@ -15,40 +15,38 @@ def simulate_bolt_dmg(combo_rate, extra_combo_rate, default_bolt, matches=1000, 
         for _ in range(rounds_per_match):
             # Default bolt + basic attack: 1 bolt, +50 rage
             bolts_base = default_bolt + 1
-            rage_base = rage + 50
+            rage = rage + 50
             
             # Check exactly 2 combos
             for _ in range(2):
                 if random.random() < combo_rate:
-                    rage_base += 25
+                    rage += 25
             
             # Rage skill at end: 3 bolts if rage >= 100, reset to 0
-            if rage_base >= 100:
+            if rage >= 100:
                 bolts_base += 3
-                rage_base = 0
+                rage = 0
             
             total_bolts_base_match += bolts_base
-            rage = rage_base
         
         # Simulate same 15 rounds for extra combo rate
         rage = 0
         for _ in range(rounds_per_match):
             # Default bolt + basic attack: 1 bolt, +50 rage
             bolts_extra = default_bolt + 1
-            rage_extra = rage + 50
+            rage = rage + 50
             
             # Check exactly 2 combos with extra_combo_rate
             for _ in range(2):
                 if random.random() < extra_combo_rate:
-                    rage_extra += 25
+                    rage += 25
             
             # Rage skill at end: 3 bolts if rage >= 100, reset to 0
-            if rage_extra >= 100:
+            if rage >= 100:
                 bolts_extra += 3
-                rage_extra = 0
+                rage = 0
             
             total_bolts_extra_match += bolts_extra
-            rage = rage_extra
         
         total_bolts_base_all += total_bolts_base_match
         # Calculate match-level percentage boost
