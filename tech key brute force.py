@@ -1,15 +1,12 @@
-import numpy as np
+import random
 import time
 
-# Remove the random seed to allow variation between runs
-# np.random.seed(42)
-
 # Define probabilities and corresponding values (in epic equivalents)
-probabilities = [0.03, 0.0933, 0.2272, 0.6495]  # Adjusted Green to 0.655 to sum to 1
-values = [1.0, 0.125, 1/24, 1/72]  # Epic = 1, Purple = 1/8, Blue = 1/24, Green = 1/72
+probabilities = [0.03, 0.0933, 0.2272, 0.6495]  # Sums to 1
+values = [1.0, 0.125, 1/24, 1/72]  # Epic, Purple, Blue, Green
 
 # Number of keys to simulate
-num_keys = 10000  # Using 10,000 iterations as specified
+num_keys = 10000
 
 # Track runtime
 start_time = time.time()
@@ -21,9 +18,9 @@ drop_history = []
 total_value = 0
 
 # Counters for guarantee mechanics
-purple_guarantee_counter = 0  # Counts keys since last purple
-epic_guarantee_counter = 0    # Counts keys since last epic
-force_purple_next = False     # Flag to force purple after epic guarantee
+purple_guarantee_counter = 0
+epic_guarantee_counter = 0
+force_purple_next = False
 
 # Simulate num_keys
 for i in range(num_keys):
@@ -43,8 +40,8 @@ for i in range(num_keys):
     
     # If both guarantees are triggered, prioritize epic, then purple on the next key
     if epic_guarantee and purple_guarantee_counter >= 9:
-        purple_guarantee = False  # Defer purple guarantee
-        force_purple_next = True  # Next key will force a purple
+        purple_guarantee = False
+        force_purple_next = True
     
     # Apply guarantees or roll normally
     if force_purple_next:
@@ -55,17 +52,17 @@ for i in range(num_keys):
     elif purple_guarantee:
         drop_value = 0.125  # Force purple
     else:
-        # Roll based on base probabilities
-        drop_value = np.random.choice(values, p=probabilities)
+        # Roll based on base probabilities using random.choices
+        drop_value = random.choices(values, weights=probabilities, k=1)[0]
     
     # Update counters
     if drop_value == 1.0:
-        epic_guarantee_counter = 0  # Reset epic counter
+        epic_guarantee_counter = 0
     else:
         epic_guarantee_counter += 1
     
     if drop_value == 0.125:
-        purple_guarantee_counter = 0  # Reset purple counter
+        purple_guarantee_counter = 0
     else:
         purple_guarantee_counter += 1
     
